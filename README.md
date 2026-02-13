@@ -1,6 +1,6 @@
-# WeatherMatch - Comparador de Clima 🌦️
+# 2Climas - Comparador de Clima 🌦️
 
-WeatherMatch é uma Single Page Application (SPA) moderna e interativa que permite comparar o clima de duas cidades brasileiras em tempo real. Desenvolvida com HTML5, CSS3 e JavaScript Vanilla, ela utiliza a API Open-Meteo para fornecer dados precisos e atualizados.
+2Climas é uma Single Page Application (SPA) moderna e interativa que permite comparar o clima de duas cidades brasileiras em tempo real. Desenvolvida com HTML5, CSS3 e JavaScript Vanilla, ela utiliza a API Open-Meteo para fornecer dados precisos e atualizados.
 
 
 ## ✨ Funcionalidades

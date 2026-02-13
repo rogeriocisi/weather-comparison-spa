@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeatherMatch - Comparador de Clima</title>
+    <title>2Climas - Comparador de Clima</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="background-blobs">
         <div class="blob blob-1"></div>
@@ -18,7 +20,7 @@
 
     <main class="container">
         <header class="app-header">
-            <h1>WeatherMatch</h1>
+            <h1>2Climas</h1>
             <p>Compare o clima de duas cidades no Brasil em tempo real</p>
         </header>
 
@@ -28,8 +30,14 @@
                 <div class="search-box">
                     <label for="city-input-1" class="sr-only">Buscar cidade 1</label>
                     <div class="input-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="city-input-1" placeholder="Buscar cidade (ex: São Paulo)" autocomplete="off">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="search-icon">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="city-input-1" placeholder="Buscar cidade (ex: São Paulo)"
+                            autocomplete="off">
                         <div id="suggestions-1" class="suggestions-list hidden"></div>
                     </div>
                 </div>
@@ -39,7 +47,7 @@
                         <h2 class="city-name" id="name-1">--</h2>
                         <span class="state-code" id="state-1">--</span>
                     </div>
-                    
+
                     <div class="current-weather">
                         <div class="temp-display">
                             <span class="temperature" id="temp-1">--</span>
@@ -57,7 +65,8 @@
                             <span class="value" id="wind-1">-- km/h</span>
                         </div>
                         <div class="detail-item">
-                            <span class="label">Umidade</span> <!-- Open-Meteo free não dá umidade no current_weather fácil, vamos ver se pegamos do hourly ou deixamos sem por enquanto, vou tentar pegar do hourly[0] -->
+                            <span class="label">Umidade</span>
+                            <!-- Open-Meteo free não dá umidade no current_weather fácil, vamos ver se pegamos do hourly ou deixamos sem por enquanto, vou tentar pegar do hourly[0] -->
                             <span class="value" id="humidity-1">--%</span>
                         </div>
                         <div class="detail-item">
@@ -82,18 +91,24 @@
                 <div class="search-box">
                     <label for="city-input-2" class="sr-only">Buscar cidade 2</label>
                     <div class="input-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="city-input-2" placeholder="Buscar cidade (ex: Salvador)" autocomplete="off">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="search-icon">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="city-input-2" placeholder="Buscar cidade (ex: Salvador)"
+                            autocomplete="off">
                         <div id="suggestions-2" class="suggestions-list hidden"></div>
                     </div>
                 </div>
 
                 <div class="weather-content hidden" id="weather-content-2">
-                     <div class="city-info">
+                    <div class="city-info">
                         <h2 class="city-name" id="name-2">--</h2>
                         <span class="state-code" id="state-2">--</span>
                     </div>
-                    
+
                     <div class="current-weather">
                         <div class="temp-display">
                             <span class="temperature" id="temp-2">--</span>
@@ -114,14 +129,14 @@
                             <span class="label">Umidade</span>
                             <span class="value" id="humidity-2">--%</span>
                         </div>
-                         <div class="detail-item">
+                        <div class="detail-item">
                             <span class="label">Sensação</span>
                             <span class="value" id="feels-like-2">--°</span>
                         </div>
                     </div>
                 </div>
 
-                 <div class="placeholder-content" id="placeholder-2">
+                <div class="placeholder-content" id="placeholder-2">
                     <p>Selecione a segunda cidade para comparar</p>
                 </div>
             </article>
@@ -130,4 +145,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
