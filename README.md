@@ -1,12 +1,12 @@
 # 2Climas - Comparador de Clima 🌦️
 
-2Climas é uma Single Page Application (SPA) moderna e interativa que permite comparar o clima de duas cidades brasileiras em tempo real. Desenvolvida com HTML5, CSS3 e JavaScript Vanilla, ela utiliza a API Open-Meteo para fornecer dados precisos e atualizados.
+2Climas é uma Single Page Application (SPA) moderna e interativa que permite comparar o clima de duas cidades em tempo real. Desenvolvida com HTML5, CSS3 e JavaScript Vanilla, ela utiliza a API Open-Meteo para fornecer dados precisos e atualizados.
 
 
 ## ✨ Funcionalidades
 
 - **Comparação Lado a Lado**: visualize as condições climáticas de duas cidades simultaneamente.
-- **Busca Inteligente**: Pesquise cidades brasileiras com sugestões automáticas enquanto digita.
+- **Busca Inteligente**: Pesquise cidades com sugestões automáticas enquanto digita.
 - **Dados Detalhados**:
     - Temperatura atual
     - Condição do tempo (com ícones descritivos)
@@ -57,7 +57,6 @@ npx live-server
 ```
 
 ## 📝 Notas
-- A busca está configurada para filtrar apenas cidades do **Brasil** (`country_code=BR`).
 - A aplicação utiliza `localStorage` ou apenas estado em memória (verificar implementação) para manter a fluidez.
 
 ---

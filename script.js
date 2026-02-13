@@ -57,6 +57,16 @@ function getWeatherDescription(code) {
     return codes[code] || { text: 'Desconhecido', icon: '❓' };
 }
 
+// Função para obter bandeira do país (emoji)
+function getCountryFlag(countryCode) {
+    if (!countryCode) return '';
+    const codePoints = countryCode
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+}
+
 // Lógica de Autocomplete
 async function searchCities(query, cardId) {
     if (query.length < 3) return []; // Mínimo de 3 caracteres
@@ -79,9 +89,9 @@ async function searchCities(query, cardId) {
         const spinner = inputWrapper.querySelector('.loading-spinner');
         if (spinner) spinner.remove();
 
-        // Filtra apenas resultados do Brasil, conforme solicitado
+        // Filtra apenas resultados do Brasil, conforme solicitado - REMOVIDO
         if (!data.results) return [];
-        return data.results.filter(city => city.country_code === 'BR');
+        return data.results;
     } catch (error) {
         console.error('Erro na busca:', error);
         // Remover loading em caso de erro
@@ -104,11 +114,13 @@ function renderSuggestions(suggestions, cardId) {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
 
-        // Formatação bonita: Nome da cidade (Estado)
-        const region = city.admin1 ? ` - ${city.admin1}` : '';
+        // Formatação bonita: Nome da cidade (Estado, País)
+        const region = city.admin1 ? `${city.admin1}, ` : '';
+        const country = city.country || city.country_code || '';
         item.innerHTML = `
             <span class="suggestion-highlight">${city.name}</span>
-            <span class="suggestion-detail">${region}</span>
+            <span class="suggestion-detail">${region}${country}</span>
+            <span class="suggestion-flag">${getCountryFlag(city.country_code)}</span>
         `;
 
         item.addEventListener('click', () => {
@@ -166,7 +178,7 @@ async function fetchWeatherData(city, cardId) {
         // O parâmetro 'apparent_temperature' em 'hourly' dá a sensação térmica.
         // A umidade relativa também está em 'hourly'.
 
-        const url = `${WEATHER_API}?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&timezone=America%2FSao_Paulo`;
+        const url = `${WEATHER_API}?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&timezone=auto`;
 
         const response = await fetch(url);
         const data = await response.json();
