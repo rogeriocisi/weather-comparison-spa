@@ -17,6 +17,18 @@
     box-sizing: border-box;
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 body {
     font-family: var(--font-main);
     background-color: var(--bg-color);
@@ -115,6 +127,46 @@ body {
 .app-header p {
     color: var(--text-secondary);
     font-size: 1.1rem;
+}
+
+
+/* Date Selection */
+.date-selection-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.glass-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-family: var(--font-main);
+    padding: 12px 24px;
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color-scheme: dark;
+    min-width: 200px;
+    text-align: center;
+}
+
+.glass-input:focus {
+    border-color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+}
+
+.glass-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.glass-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
 }
 
 /* Comparison Grid */

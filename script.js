@@ -17,6 +17,25 @@ const suggestionLists = {
     2: document.getElementById('suggestions-2')
 };
 
+// Inicialização do Date Picker
+const dateInput = document.getElementById('forecast-date');
+const now = new Date();
+const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+dateInput.value = today;
+dateInput.min = today;
+
+// Max date: 15 days from now
+const maxDate = new Date();
+maxDate.setDate(now.getDate() + 15);
+const maxDateString = maxDate.getFullYear() + '-' + String(maxDate.getMonth() + 1).padStart(2, '0') + '-' + String(maxDate.getDate()).padStart(2, '0');
+dateInput.max = maxDateString;
+
+dateInput.addEventListener('change', () => {
+    if (state.city1) fetchWeatherData(state.city1, 1);
+    if (state.city2) fetchWeatherData(state.city2, 2);
+});
+
 // Funções Utilitárias
 
 // Debounce para evitar chamadas excessivas na API
@@ -172,37 +191,82 @@ async function selectCity(city, cardId) {
 
 async function fetchWeatherData(city, cardId) {
     try {
-        // Pedindo dados atuais e hourly para tentar pegar umidade e sensação térmica mais precisos se possível
-        // Mas Open-Meteo fornece current_weather e hourly.
-        // Vamos usar current para básico e hourly para refinar se precisar.
-        // O parâmetro 'apparent_temperature' em 'hourly' dá a sensação térmica.
-        // A umidade relativa também está em 'hourly'.
+        const dateInput = document.getElementById('forecast-date');
+        const selectedDate = dateInput.value;
+        // Recalculate today string to ensure match
+        const now = new Date();
+        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const isToday = selectedDate === today;
 
-        const url = `${WEATHER_API}?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&timezone=auto`;
+        let url = `${WEATHER_API}?latitude=${city.latitude}&longitude=${city.longitude}&timezone=auto`;
+
+        if (isToday) {
+            url += `&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m`;
+        } else {
+            url += `&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,wind_speed_10m_max&start_date=${selectedDate}&end_date=${selectedDate}`;
+            // Fetch hourly for humidity estimation (noon)
+            url += `&hourly=relative_humidity_2m`;
+        }
 
         const response = await fetch(url);
         const data = await response.json();
 
-        updateWeatherCard(data, cardId);
+        updateWeatherCard(data, cardId, isToday);
     } catch (error) {
         console.error('Erro ao buscar clima:', error);
         alert('Erro ao buscar dados do clima. Tente novamente.');
     }
 }
 
-function updateWeatherCard(data, cardId) {
-    const current = data.current;
+function updateWeatherCard(data, cardId, isToday) {
+    let temp, conditionCode, wind, humidity, feelsLike;
 
-    const weatherInfo = getWeatherDescription(current.weather_code);
+    if (isToday && data.current) {
+        const current = data.current;
+        temp = Math.round(current.temperature_2m);
+        conditionCode = current.weather_code;
+        wind = current.wind_speed_10m;
+        humidity = current.relative_humidity_2m;
+        feelsLike = Math.round(current.apparent_temperature);
+    } else if (data.daily) {
+        const daily = data.daily;
+        // Show Max / Min for forecast
+        const max = Math.round(daily.temperature_2m_max[0]);
+        const min = Math.round(daily.temperature_2m_min[0]);
+        temp = `${max}° / ${min}`;
+        
+        conditionCode = daily.weather_code[0];
+        wind = daily.wind_speed_10m_max[0];
+        
+        // Estimate humidity from hourly (noon = index 12)
+        if (data.hourly && data.hourly.relative_humidity_2m) {
+             humidity = data.hourly.relative_humidity_2m[12];
+        } else {
+             humidity = '--';
+        }
+
+        feelsLike = Math.round(daily.apparent_temperature_max[0]);
+    }
+
+    const weatherInfo = getWeatherDescription(conditionCode);
 
     // Atualizar DOM
-    document.getElementById(`temp-${cardId}`).textContent = Math.round(current.temperature_2m);
+    const tempEl = document.getElementById(`temp-${cardId}`);
+    tempEl.textContent = temp;
+    
+    // Adjust font size for longer forecast string
+    if (typeof temp === 'string' && temp.includes('/')) {
+        tempEl.style.fontSize = '2.5rem';
+    } else {
+        tempEl.style.removeProperty('font-size'); // Reset to CSS default
+    }
+
     document.getElementById(`condition-${cardId}`).textContent = weatherInfo.text;
     document.getElementById(`icon-${cardId}`).textContent = weatherInfo.icon;
 
-    document.getElementById(`wind-${cardId}`).textContent = `${current.wind_speed_10m} km/h`;
-    document.getElementById(`humidity-${cardId}`).textContent = `${current.relative_humidity_2m}%`;
-    document.getElementById(`feels-like-${cardId}`).textContent = `${Math.round(current.apparent_temperature)}°`;
+    document.getElementById(`wind-${cardId}`).textContent = `${wind} km/h`;
+    document.getElementById(`humidity-${cardId}`).textContent = `${humidity}%`;
+    document.getElementById(`feels-like-${cardId}`).textContent = `${feelsLike}°`;
 
     // Mostrar conteúdo e esconder placeholder
     document.getElementById(`placeholder-${cardId}`).classList.add('hidden');
